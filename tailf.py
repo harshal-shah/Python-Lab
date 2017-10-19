@@ -43,12 +43,12 @@ class Tail(object):
     tail_length = self.lines
     myiter = 0
     blocks = []
-    with open(self.path, mode='r') as fh:
+    with open(self.path, mode='rb') as fh:
       while len(blocks) < (tail_length + 1):
         # Go 2^block_size from the end of file
         fh.seek((-1 * ((2**myiter) * block_size)), 2)
-        #print "Reading {} bytes".format((2**myiter) * block_size)
-        blocks = fh.read((2**myiter) * block_size).split('\n')
+        print("Reading {} bytes".format((2**myiter) * block_size))
+        blocks = str(fh.read((2**myiter) * block_size), 'utf-8').split('\n')
         myiter += 1
     return blocks[-1 * tail_length::]
 
@@ -65,9 +65,9 @@ def main():
   for line in lines:
     print(line, end='')
   print('Method 3')
-    lines = instance3.blocktail()
+  lines = instance3.blocktail()
   for line in lines:
-    print(line, end='')
+    print(line, end='\n')
 
 if __name__ == '__main__':
   main()
