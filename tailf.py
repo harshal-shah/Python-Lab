@@ -37,16 +37,35 @@ class Tail(object):
     with open(self.path) as f:
       lines = deque(f, self.lines)
     return lines
+  
+  
+  def blocktail(self, block_size=64):
+    tail_length = self.lines
+    myiter = 0
+    blocks = []
+    with open(self.path, mode='r') as fh:
+      while len(blocks) < (tail_length + 1):
+        # Go 2^block_size from the end of file
+        fh.seek((-1 * ((2**myiter) * block_size)), 2)
+        #print "Reading {} bytes".format((2**myiter) * block_size)
+        blocks = fh.read((2**myiter) * block_size).split('\n')
+        myiter += 1
+    return blocks[-1 * tail_length::]
 
 
 def main():
   instance = Tail(sys.argv[1])
   instance2 = Tail(sys.argv[1])
+  instance3 = Tail(sys.argv[1])
   print('Method 1')
   print(instance.print_lines())
   print()
   print('Method 2')
   lines = instance2.print_lines2()
+  for line in lines:
+    print(line, end='')
+  print('Method 3')
+    lines = instance3.blocktail()
   for line in lines:
     print(line, end='')
 
